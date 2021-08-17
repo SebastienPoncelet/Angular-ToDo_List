@@ -103,6 +103,23 @@ export class AppComponent {
 
   /**
   * @ngdoc function
+  * @name changeStatus
+  * @methodOf app.component.ts
+  * @param {number} index Task index from table
+  * @description updates an items completed value
+  * @public
+  */
+   public changeStatus(index: number) {
+    this.selectedIndex = index
+    this.registerForm.setValue({
+      title: this.items[this.selectedIndex]["title"],
+      completed: this.items[this.selectedIndex]['completed'] = !this.items[this.selectedIndex]['completed']
+    })
+    this.modifyTask()
+  }
+
+  /**
+  * @ngdoc function
   * @name modifyTask
   * @methodOf app.component.ts
   * @param none
