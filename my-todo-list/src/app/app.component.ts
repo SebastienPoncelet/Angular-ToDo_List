@@ -12,17 +12,15 @@ import {TasksService} from './_services/tasks.services';
 export class AppComponent {
 
 	/* An empty array that is responsible
-	to add a division */
+	to store todo items */
 	public items: Item[] = [];
 
-	/* A two-way binding performed which
-	pushes text on division */
-	public newTask: any;
+  public isEditable: boolean = false; // Variable to display or hide the edit form for a todo task
+  public selectedIndex: number = 0;
 
   public registerForm: FormGroup = new FormGroup({});
 
   constructor(
-    // TODO: replace with apropriate service
     private formBuilder: FormBuilder,
     public tasksService: TasksService
     )
@@ -32,54 +30,111 @@ export class AppComponent {
     // Forms on init
     this.registerForm = this.formBuilder.group({
       title: [''],
-      completed: [null]
+      completed: [false]
     });
 
-    // TODO: Create local storage for keeping new tasks in memory
-    localStorage.setItem('test-item', JSON.stringify(this.items))
+    // If data is already in the local store, assign it to the todo list
+    if(localStorage.getItem("tasks") !== '') {
+      this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
 
-    this.getTasks();
+    }
+    else{
+      this.getTasks();
+    }
   }
 
+  /**
+  * @ngdoc function
+  * @name getTasks
+  * @methodOf app.component.ts
+  * @param none
+  * @description calls the tasks service to get list from API endpoint
+  * @public
+  */
   public getTasks() {
-    // TODO: Call service to retrive tasks list from url
     this.tasksService.index().subscribe(
       (response: any) => {
         response.slice(0, 11).map((item: any, i: any) => {
           this.items.push(item);
         });
-        console.log('app.component.ts - 50 ==> response', response)
+        this.updateLocalStorage(this.items)
       },
       error => {
-        // TODO: throw exception
-        // console.log("yolo-error", error);
+        throw new Error(error.message);
       }
     )
-
   }
 
-  /* When input is empty, it will
-  not create a new division */
+  /**
+  * @ngdoc function
+  * @name createTaskOnSubmit
+  * @methodOf app.component.ts
+  * @param none
+  * @description adds task to the list and updates localStorage
+  * @public
+  */
   createTaskOnSubmit() {
     if(this.registerForm.value.title == '')
     {}
     else {
-      console.log('app.component.ts - 66 ==> this.registerForm.value', this.registerForm.value)
       this.items.push(this.registerForm.value);
+      this.updateLocalStorage(this.items)
     }
+    // Reinitializing the form's values
+    this.registerForm.setValue({title: '', completed: false})
   }
 
-  /* This function takes to input the
-	task, that has to be deleted*/
-	public modifyTask(index: number) {
-    console.log('app.component.ts - 73 ==> index', index)
-		this.items.splice(index, 1);
+  /**
+  * @ngdoc function
+  * @name itemIsEditable
+  * @methodOf app.component.ts
+  * @param {number} index Task index from table
+  * @description triggers the edit form and saves the task index
+  * @public
+  */
+  public itemIsEditable(index: number) {
+    this.isEditable = true
+    this.selectedIndex = index
+  }
+
+  /**
+  * @ngdoc function
+  * @name modifyTask
+  * @methodOf app.component.ts
+  * @param none
+  * @description updates a task from the list
+  * @public
+  */
+	public modifyTask() {
+    this.items[this.selectedIndex]['title'] = this.registerForm.value.title ? this.registerForm.value.title : this.items[this.selectedIndex]['title']
+    this.items[this.selectedIndex]['completed'] = this.registerForm.value.completed
+    // Hiding the edit form and reinitializing the form's values
+    this.isEditable = false
+    this.registerForm.setValue({title: '', completed: false})
 	}
 
-	/* This function takes to input the
-	task, that has to be deleted*/
+  /**
+  * @ngdoc function
+  * @name deleteTask
+  * @methodOf app.component.ts
+  * @param {number} index Task index from table
+  * @description This method removes a task from the list
+  * @public
+  */
 	public deleteTask(index: number) {
-    console.log('app.component.ts - 73 ==> index', index)
 		this.items.splice(index, 1);
+    this.updateLocalStorage(this.items)
 	}
+
+  /**
+  * @ngdoc function
+  * @name updateLocalStorage
+  * @methodOf app.component.ts
+  * @param {Item[]} items List of todo tasks
+  * @description This method updates the local storage
+  * @public
+  */
+  public updateLocalStorage(items: Item[]) {
+    localStorage.setItem("tasks", JSON.stringify(items))
+  }
 }

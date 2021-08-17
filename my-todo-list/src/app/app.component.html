@@ -8,8 +8,9 @@
     </div>
   </div>
   <!-- TODO: Full width on mobile screens, 8 col / 12 otherwise -->
-  <!--Division for taking input from user -->
-  <form [formGroup]="registerForm" (ngSubmit)="createTaskOnSubmit()" class="col-7 form-control">
+  <!--Division for taking input from user - Only visible when creating a task -->
+  <form *ngIf="!isEditable" [formGroup]="registerForm" (ngSubmit)="createTaskOnSubmit()" class="col-7 form-control">
+    <h3>To create a task, please fill out the form below.</h3>
     <div class="form-group">
       <label for="title">Task Title:</label>
       <input type="text" formControlName="title" class="form-control" />
@@ -34,6 +35,33 @@
     </div>
   </form>
 
+  <!--Division for taking input from user - Only visible when editing a task-->
+  <form *ngIf="isEditable" [formGroup]="registerForm" (ngSubmit)="modifyTask()" class="col-7 form-control">
+    <h3>To edit the selected task, please fill out the form below.</h3>
+    <div class="form-group">
+      <label for="title">Task Title:</label>
+      <input type="text" formControlName="title" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label>Task Completed:</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" formControlName="completed" name="completed" id="completed" [value]="true" checked>
+        <label class="form-check-label" for="completed">
+          Yes
+        </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" formControlName="completed" name="completed" id="completed" [value]="false">
+        <label class="form-check-label" for="completed">
+          No
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-success">Update Task</button>
+    </div>
+  </form>
+
   <!--Tasks added repeated divisions-->
   <table class="table table-hover">
     <thead>
@@ -55,7 +83,7 @@
             <span>{{ item.completed }}</span>
           </td>
           <td>
-            <button class="btn btn-secondary">Edit</button>
+            <button class="btn btn-secondary" (click)="itemIsEditable(id)">Edit</button>
           </td>
           <td>
             <button class="btn btn-danger" (click)="deleteTask(id)">Delete</button>
