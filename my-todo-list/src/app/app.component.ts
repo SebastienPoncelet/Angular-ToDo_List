@@ -36,7 +36,7 @@ export class AppComponent {
     });
 
     // TODO: Create local storage for keeping new tasks in memory
-    localStorage.setItem('test-item', 'test item result')
+    localStorage.setItem('test-item', JSON.stringify(this.items))
 
     this.getTasks();
     // console.log("USER TEMP 47");
@@ -52,11 +52,7 @@ export class AppComponent {
     if(newTask.title == '')
     {}
     else {
-      console.log('app.component.ts - 52 ==> registerForm', newTask)
       this.items.push(newTask);
-      console.log('app.component.ts - 54 ==> this.items', this.items)
-      console.log('app.component.ts - 55 ==> local storage', localStorage.getItem('test-item'))
-			// this.newTask = '';
     }
 		// if (this.newTask == '') {
 		// }
@@ -67,6 +63,7 @@ export class AppComponent {
 	}
 
   createTaskOnSubmit() {
+    
     // this.tasksService.create(this.registerForm.value).subscribe(
     //   response => {
     //     // console.log("yolo", response);
