@@ -32,11 +32,9 @@ export class AppComponent {
       title: [''],
       completed: [false]
     });
-
     // If data is already in the local store, assign it to the todo list
-    if(localStorage.getItem("tasks") !== '') {
+    if(localStorage.getItem("tasks") !== '' && localStorage.getItem("tasks") !== '[]') {
       this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
-
     }
     else{
       this.getTasks();
