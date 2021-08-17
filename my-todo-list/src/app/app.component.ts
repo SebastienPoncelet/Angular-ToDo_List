@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Item } from './item';
+import { Item } from './_interfaces/item';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {TasksService} from './_services/tasks.services';
 
