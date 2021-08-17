@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Item } from './item';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import {TasksService} from './_services/tasks.services';
 
 @Component({
 	selector: 'app-root',
@@ -21,10 +22,8 @@ export class AppComponent {
 
   constructor(
     // TODO: replace with apropriate service
-    // public tasksService: tasksService,
-    // Forms Builder
-    // public registerForm: FormGroup,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public tasksService: TasksService
     )
     { }
 
@@ -44,6 +43,20 @@ export class AppComponent {
 
   public getTasks() {
     // TODO: Call service to retrive tasks list from url
+    this.tasksService.index().subscribe(
+      (response: any) => {
+        response.slice(0, 11).map((item: any, i: any) => {
+          this.items.push(item);
+        });
+        console.log('app.component.ts - 48 ==> response', response)
+        // this.items = response;
+        // console.log("yolo", response);
+      },
+      error => {
+        // console.log("yolo-error", error);
+      }
+    )
+
   }
 
 	/* When input is empty, it will
@@ -63,7 +76,7 @@ export class AppComponent {
 	}
 
   createTaskOnSubmit() {
-    
+
     // this.tasksService.create(this.registerForm.value).subscribe(
     //   response => {
     //     // console.log("yolo", response);
