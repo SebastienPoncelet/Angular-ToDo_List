@@ -1,14 +1,14 @@
 <!--Division for heading-->
 <div class="container-fluid">
-	<div class="row bg-success justify-content-center
+  <div class="row bg-success justify-content-center
 			align-items-center" style="height:80px">
-		<div class="col-3"></div>
-		<div class="col-6 text-light h2">
-			Seb's Todo List
-		</div>
-	</div>
+    <div class="col-3"></div>
+    <div class="col-6 text-light h2">
+      Seb's Todo List
+    </div>
+  </div>
 
-  <form [formGroup]="registerForm" (ngSubmit)="createTaskOnSubmit()">
+  <!-- <form [formGroup]="registerForm" (ngSubmit)="createTaskOnSubmit()">
     <div class="form-group">
       <label for="title">Task Title</label>
       <input type="text" formControlName="title" class="form-control" />
@@ -25,9 +25,9 @@
     <div class="form-group">
       <button class="btn btn-primary">Create Task</button>
     </div>
-  </form>
+  </form> -->
 
-  <nav>
+  <!-- <nav>
     {{ items }}
     <div *ngFor="let item of items">
       <ul>
@@ -39,32 +39,44 @@
         </li>
       </ul>
     </div>
-  </nav>
+  </nav> -->
 
   <!--Division for taking input from user -->
-	<div class="row mt-1" style="height:80px;">
-		<div class="col-3 d-none col-md-3 d-md-block"></div>
-		<div class="col-12 col-md-6 bg-success d-flex
-					justify-content-center align-items-center
-					text-light h3">
+  <form [formGroup]="registerForm" (ngSubmit)="createTaskOnSubmit()" class="col-7 form-control">
+    <div class="form-group">
+      <label for="title">Task Title:</label>
+      <input type="text" formControlName="title" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label>Task Completed:</label>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="completed" id="completed" [value]="true" checked>
+        <label class="form-check-label" for="completed">
+              Yes
+            </label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="completed" id="not-completed" [value]="false">
+        <label class="form-check-label" for="not-completed">
+              No
+            </label>
+      </div>
+      <!-- <div>
+            <label>
+                <input type="radio" name="completed" formControlName="completed" [value]="true" />Yes
+            </label>
+            <label>
+                <input type="radio" name="completed" formControlName="completed" [value]="false" />No
+            </label>
+          </div> -->
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary">Create Task</button>
+    </div>
+  </form>
 
-			<input [(ngModel)]="newTask" type="text"
-					value="" class="col-7 form-control"
-						style="width:300px;">
-
-			<div class="col-1"></div>
-
-			<button (click)="addToList('nothing')"
-				class="btn btn-light text-success">
-				ADD TASK
-			</button>
-		</div>
-
-		<div class="col-3 d-none col-md-3 d-md-block"></div>
-	</div>
-
-	<!--Division for taking input from user -->
-	<!-- <div class="row mt-1" style="height:80px;">
+  <!--Division for taking input from user -->
+  <!-- <div class="row mt-1" style="height:80px;">
 		<div class="col-3 d-none col-md-3 d-md-block"></div>
 		<div class="col-12 col-md-6 bg-success d-flex
 					justify-content-center align-items-center
@@ -85,8 +97,8 @@
 		<div class="col-3 d-none col-md-3 d-md-block"></div>
 	</div> -->
 
-	<!--Tasks added repeated divisions-->
-	<div *ngFor="let x of items; let index = index;"
+  <!--Tasks added repeated divisions-->
+  <!-- <div *ngFor="let x of items; let index = index;"
 			class="row mt-1" style="height:100px;">
 
 		<div class="col-3 d-none col-md-3 d-md-block"></div>
@@ -102,5 +114,29 @@
 		</div>
 		
 		<div class="col-3 d-none col-md-3 d-md-block"></div>
-	</div>
-</div>
+	</div> -->
+
+  <!--Tasks added repeated divisions-->
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <!-- <th scope="col">ID</th> -->
+        <th scope="col">Title</th>
+        <th scope="col">Completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <div *ngFor="let item of items"> -->
+        <ng-container *ngFor="let item of items; let id = index">
+        <tr>
+          <td>
+            <span>{{ item.title }}</span>
+          </td>
+          <td>
+            <span>{{ item.completed }}</span>
+          </td>
+        </tr>
+      </ng-container>
+      <!-- </div> -->
+    </tbody>
+  </table>
