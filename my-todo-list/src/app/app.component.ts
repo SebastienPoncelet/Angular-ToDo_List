@@ -95,6 +95,10 @@ export class AppComponent {
   public itemIsEditable(index: number) {
     this.isEditable = true
     this.selectedIndex = index
+    this.registerForm.setValue({
+      title: this.items[this.selectedIndex]["title"],
+      completed: this.items[this.selectedIndex]['completed']
+    })
   }
 
   /**
@@ -108,6 +112,7 @@ export class AppComponent {
 	public modifyTask() {
     this.items[this.selectedIndex]['title'] = this.registerForm.value.title ? this.registerForm.value.title : this.items[this.selectedIndex]['title']
     this.items[this.selectedIndex]['completed'] = this.registerForm.value.completed
+    this.updateLocalStorage(this.items)
     // Hiding the edit form and reinitializing the form's values
     this.isEditable = false
     this.registerForm.setValue({title: '', completed: false})
@@ -137,4 +142,28 @@ export class AppComponent {
   public updateLocalStorage(items: Item[]) {
     localStorage.setItem("tasks", JSON.stringify(items))
   }
+
+  // /**
+  // * @ngdoc function
+  // * @name getCompleted
+  // * @methodOf app.component.ts
+  // * @param none
+  // * @description This method filters the items list to return only the 
+  // * @public
+  // */
+  //  public getCompleted() {
+  //   localStorage.setItem("tasks", JSON.stringify(items))
+  // }
+
+  // /**
+  // * @ngdoc function
+  // * @name getNotCompleted
+  // * @methodOf app.component.ts
+  // * @param none
+  // * @description This method updates the local storage
+  // * @public
+  // */
+  //  public getNotCompleted() {
+  //   localStorage.setItem("tasks", JSON.stringify(items))
+  // }
 }
