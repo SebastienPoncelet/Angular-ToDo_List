@@ -33,11 +33,14 @@ export class AppComponent {
       completed: [false]
     });
     // If data is already in the local store, assign it to the todo list
-    if(localStorage.getItem("tasks") !== '' && localStorage.getItem("tasks") !== '[]') {
+    console.log('app - 36 ==> localStorage.getItem("tasks")', localStorage.getItem("tasks"))
+    if(localStorage.getItem("tasks") !== '' && localStorage.getItem("tasks") !== '[]' && localStorage.getItem("tasks") !== null) {
       this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
+      console.log('app - 39 ==> this.items', this.items)
     }
     else{
       this.getTasks();
+      console.log('app - 43 ==> this.items', this.items)
     }
   }
 
@@ -56,6 +59,7 @@ export class AppComponent {
           this.items.push(item);
         });
         this.updateLocalStorage(this.items)
+        return true;
       },
       error => {
         throw new Error(error.message);
