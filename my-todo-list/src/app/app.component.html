@@ -62,7 +62,12 @@
     </div>
   </form>
 
-  <!--Tasks added repeated divisions-->
+  <!--Table filter options-->
+  <button type="button" class="btn btn btn-outline-secondary" (click)="filterBy('')">All</button>
+  <button type="button" class="btn btn btn-outline-secondary" (click)="filterBy('completed')">Completed</button>
+  <button type="button" class="btn btn btn-outline-secondary" (click)="filterBy('active')">Active</button>
+
+  <!--Table - Tasks added repeated divisions-->
   <table class="table table-hover">
     <thead>
       <tr>

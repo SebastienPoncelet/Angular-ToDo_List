@@ -122,6 +122,33 @@ export class AppComponent {
 
   /**
   * @ngdoc function
+  * @name filterBy
+  * @methodOf app.component.ts
+  * @param {string} status filter option
+  * @description filters todo list array according to selected option
+  * @public
+  */
+   public filterBy(status: string) {
+    if(status === 'active')
+    {
+      this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
+      const result = this.items.filter(item => item.completed === false);
+      this.items = result
+    }
+    else if(status === 'completed')
+    {
+      this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
+      const result = this.items.filter(item => item.completed === true);
+      this.items = result
+    }
+    else
+    {
+      this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
+    }
+  }
+
+  /**
+  * @ngdoc function
   * @name modifyTask
   * @methodOf app.component.ts
   * @param none
