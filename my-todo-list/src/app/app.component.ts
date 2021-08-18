@@ -33,7 +33,10 @@ export class AppComponent {
       completed: [false]
     });
     // If data is already in the local store, assign it to the todo list
-    if(localStorage.getItem("tasks") !== '' && localStorage.getItem("tasks") !== '[]' && localStorage.getItem("tasks") !== null) {
+    if(localStorage.getItem("tasks-filtered") !== '' && localStorage.getItem("tasks-filtered") !== '[]' && localStorage.getItem("tasks-filtered") !== null) {
+      this.items = JSON.parse(localStorage.getItem("tasks-filtered") || '{}');
+    }
+    else if(localStorage.getItem("tasks") !== '' && localStorage.getItem("tasks") !== '[]' && localStorage.getItem("tasks") !== null) {
       this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
     }
     else{
@@ -55,7 +58,7 @@ export class AppComponent {
         response.slice(0, 11).map((item: any, i: any) => {
           this.items.push(item);
         });
-        this.updateLocalStorage(this.items)
+        this.updateLocalStorage('tasks', this.items)
         return true;
       },
       error => {
@@ -77,7 +80,7 @@ export class AppComponent {
     {}
     else {
       this.items.push(this.registerForm.value);
-      this.updateLocalStorage(this.items)
+      this.updateLocalStorage('tasks', this.items)
     }
     // Reinitializing the form's values
     this.registerForm.setValue({title: '', completed: false})
@@ -131,12 +134,14 @@ export class AppComponent {
       this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
       const result = this.items.filter(item => item.completed === false);
       this.items = result
+      this.updateLocalStorage("tasks-filtered", this.items)
     }
     else if(status === 'completed')
     {
       this.items = JSON.parse(localStorage.getItem("tasks") || '{}');
       const result = this.items.filter(item => item.completed === true);
       this.items = result
+      this.updateLocalStorage("tasks-filtered", this.items)
     }
     else
     {
@@ -155,7 +160,7 @@ export class AppComponent {
 	public modifyTask() {
     this.items[this.selectedIndex]['title'] = this.registerForm.value.title ? this.registerForm.value.title : this.items[this.selectedIndex]['title']
     this.items[this.selectedIndex]['completed'] = this.registerForm.value.completed
-    this.updateLocalStorage(this.items)
+    this.updateLocalStorage('tasks', this.items)
     // Hiding the edit form and reinitializing the form's values
     this.isEditable = false
     this.registerForm.setValue({title: '', completed: false})
@@ -171,7 +176,7 @@ export class AppComponent {
   */
 	public deleteTask(index: number) {
 		this.items.splice(index, 1);
-    this.updateLocalStorage(this.items)
+    this.updateLocalStorage('tasks', this.items)
 	}
 
   /**
@@ -182,31 +187,7 @@ export class AppComponent {
   * @description This method updates the local storage
   * @public
   */
-  public updateLocalStorage(items: Item[]) {
-    localStorage.setItem("tasks", JSON.stringify(items))
+  public updateLocalStorage(key: string, items: Item[]) {
+    localStorage.setItem(key, JSON.stringify(items))
   }
-
-  // /**
-  // * @ngdoc function
-  // * @name getCompleted
-  // * @methodOf app.component.ts
-  // * @param none
-  // * @description This method filters the items list to return only the 
-  // * @public
-  // */
-  //  public getCompleted() {
-  //   localStorage.setItem("tasks", JSON.stringify(items))
-  // }
-
-  // /**
-  // * @ngdoc function
-  // * @name getNotCompleted
-  // * @methodOf app.component.ts
-  // * @param none
-  // * @description This method updates the local storage
-  // * @public
-  // */
-  //  public getNotCompleted() {
-  //   localStorage.setItem("tasks", JSON.stringify(items))
-  // }
 }
